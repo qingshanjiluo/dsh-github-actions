@@ -156,6 +156,9 @@ function listWorkflowFiles(cwd: string): string[] {
 }
 
 function readWorkflowFile(cwd: string, filename: string): string {
+  if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+    throw new Error('非法文件名');
+  }
   const filePath = join(cwd, '.github', 'workflows', filename);
   if (!existsSync(filePath)) throw new Error(`Workflow 文件不存在: ${filename}`);
   return readFileSync(filePath, 'utf-8');
